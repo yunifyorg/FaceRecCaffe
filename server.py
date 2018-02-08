@@ -33,9 +33,9 @@ def identify():
     embs = feature_extractor.getFeatures(img)
     names = []
     distances = []
-    if len(emb) > 0:
+    if len(embs) > 0:
         for emb in embs:
-            data = {'vector': pickle.dumps(emb)}
+            data = {'vector': pickle.dumps(emb), 'model': 'caffe'}
             r = requests.post(DB_ADDRESS + '/find', json=data)
             r_json = r.json()
             names.append(r_json.get('name', 'Unknown'))

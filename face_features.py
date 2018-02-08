@@ -66,10 +66,10 @@ def align(img, f5pt, crop_size=144, ec_mc_y=48, ec_y=48):
     eyec2 = (eyec - rot_shape/2) * resize_scale + res_shape/2
     eyec2 = np.round(eyec2).astype(int)
     img_crop = np.zeros((crop_size, crop_size, img_rot.shape[2]))
-    crop_y = eyec2[0] - ec_y
-    crop_y_end = crop_y + crop_size - 1
-    crop_x = eyec2[1]-math.floor(crop_size/2)
-    crop_x_end = crop_x + crop_size - 1
+    crop_y = int(eyec2[0] - ec_y)
+    crop_y_end = int(crop_y + crop_size - 1)
+    crop_x = int(eyec2[1]-math.floor(crop_size/2))
+    crop_x_end = int(crop_x + crop_size - 1)
     box = guard(np.array([crop_x, crop_x_end, crop_y, crop_y_end]), img_resize.shape)
     img_crop[box[2]-crop_y+1:box[3]-crop_y+1, box[0]-crop_x+1:box[1]-crop_x+1,:] = img_resize[box[2]:box[3],box[0]:box[1],:]
     cropped = img_crop/255
