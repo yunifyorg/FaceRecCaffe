@@ -85,7 +85,7 @@ class FaceFeatureExtractor():
     def getFeatures(self, img):
         img_aligned = self.getAlignedImg(img)
         im_gray = cv2.cvtColor(img_aligned.astype(np.float32), cv2.COLOR_RGB2GRAY)
-        self.net.blobs['data'] = im_gray
+        self.net.blobs['data'].data[...] = cv2.resize(im_gray, (128, 128))
         return self.net.forward()['prob']
 
     def getAlignedImg(self, img):
