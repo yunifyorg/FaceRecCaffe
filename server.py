@@ -1,8 +1,13 @@
+import matplotlib
+matplotlib.use("Pdf")
+
 from face_features import FaceFeatureExtractor
 
+import os
 import numpy as np
 import pickle
 import requests
+import cv2
 
 from flask import Flask, request, jsonify
 
@@ -11,6 +16,7 @@ app = Flask(__name__)
 
 
 feature_extractor = FaceFeatureExtractor()
+DB_ADDRESS = os.environ.get('DB_ADDRESS', 'http://localhost:5000')
 
 
 def get_embeddings(face_patches):
@@ -30,7 +36,7 @@ def identify():
     if len(emb) > 0:
         for emb in embs:
             data = {'vector': pickle.dumps(emb)}
-            r = requests.post('http://localhost:5000/find', json=data)
+            r = requests.post(DB_ADDRESS + '/find', json=data)
             r_json = r.json()
             names.append(r_json.get('name', 'Unknown'))
             distances.append(r_json.get('distance', -1))
@@ -56,7 +62,7 @@ def add(name):
             'vector': pickle.dumps(embs[0]),
             'model': 'caffe'
             }
-    r = requests.post('http://localhost:5000/add', json=data)
+    r = requests.post(DB_ADDRESS + '/add', json=data)
     return r.text
 
 
