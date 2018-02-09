@@ -291,7 +291,7 @@ def detect_face(im, PNet, RNet, ONet):
 
     assert num_channels == 3, 'Error: only support RGB image.'
 
-    MIN_FACE_SIZE = 24.    # Minimum face size.
+    MIN_FACE_SIZE = 288.    # Minimum face size.
     MIN_INPUT_SIZE = 12.   # Minimum input size.
     m = MIN_INPUT_SIZE / MIN_FACE_SIZE
 
@@ -316,6 +316,7 @@ def detect_face(im, PNet, RNet, ONet):
     # First stage.
     #
     total_boxes = []  # Bounding boxes of all scales.
+    print(scales)
     for scale in scales:
         hs = int(math.ceil(image_height*scale))
         ws = int(math.ceil(image_width*scale))
@@ -416,6 +417,6 @@ class MTCNN():
 
 if __name__ == '__main__':
   mtcnn = MTCNN()
-  im = cv2.imread('/home/jg/Pictures/Webcam/2018-01-13-173605.jpg')
+  im = cv2.imread('/home/jg/Pictures/Webcam/2018-01-13-223825.jpg')
   mtcnn.detect_and_show(im)
 
