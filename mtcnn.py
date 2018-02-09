@@ -2,6 +2,7 @@
    https://github.com/kuangliu/pycaffe-mtcnn with small adaptations.'''
 
 import math
+import time
 
 import cv2
 import caffe
@@ -310,6 +311,7 @@ def detect_face(im, PNet, RNet, ONet):
     # Threshold for each stage.
     THRESHOLD = [0.6, 0.7, 0.7]
 
+    t0 = time.time()
     # --------------------------------------------------------------
     # First stage.
     #
@@ -346,7 +348,8 @@ def detect_face(im, PNet, RNet, ONet):
 
     if bboxes.shape[0] == 0:
         return
-
+    t1 = time.time()
+    print('Stage 1: %s' % (t1 - t0))
     # --------------------------------------------------------------
     # Second stage.
     #
@@ -367,6 +370,8 @@ def detect_face(im, PNet, RNet, ONet):
     if bboxes.shape[0] == 0:
         return
 
+    t2 = time.time()
+    print('Stage 2: %s' % (t2 - t1))
     # --------------------------------------------------------------
     # Third stage.
     #
@@ -384,6 +389,8 @@ def detect_face(im, PNet, RNet, ONet):
     points = points[picked_indices]
     bboxes = padding(bboxes, image_height, image_width)
 
+    t3 = time.time()
+    print('Stage 3: %s' % (t3 - t2))
     return bboxes, points
 
 

@@ -2,6 +2,7 @@ import math
 
 import caffe
 import cv2
+import time
 import numpy as np
 
 from mtcnn import MTCNN
@@ -83,10 +84,17 @@ class FaceFeatureExtractor():
         self.net = caffe.Net('./mtcnn/LightenedCNN_B.prototxt', './mtcnn/LightenedCNN_B.caffemodel', caffe.TEST)
 
     def getFeatures(self, img):
+        t0 = time.time()
         img_aligned = self.getAlignedImg(img)
+        t1 = time.time()
+        print('Time taken in alignment: %s' % (t1 - t0))
         im_gray = cv2.cvtColor(img_aligned.astype(np.float32), cv2.COLOR_RGB2GRAY)
+        t2 = time.time()
         self.net.blobs['data'].data[...] = cv2.resize(im_gray, (128, 128))
-        return self.net.forward()['prob']
+        print('Time taken in recoloring and resizing: %s' % (t2 - t1))
+        result = self.net.forward()['prob']
+        print('Time taken in feature derivation: %s' % (time.time() - t2))
+        return result
 
     def getAlignedImg(self, img):
         _, f5pt = self.face_detector.detect(img)
