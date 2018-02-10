@@ -291,7 +291,7 @@ def detect_face(im, PNet, RNet, ONet):
 
     assert num_channels == 3, 'Error: only support RGB image.'
 
-    MIN_FACE_SIZE = 288.    # Minimum face size.
+    MIN_FACE_SIZE = 96.    # Minimum face size.
     MIN_INPUT_SIZE = 12.   # Minimum input size.
     m = MIN_INPUT_SIZE / MIN_FACE_SIZE
 
@@ -338,6 +338,9 @@ def detect_face(im, PNet, RNet, ONet):
         bboxes,_ = non_max_suppression(bboxes, 0.5)
 
         total_boxes.append(bboxes)
+
+    if len(total_boxes) == 0:
+        return [], []
 
     total_boxes = np.vstack(total_boxes)
 
