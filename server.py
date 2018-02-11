@@ -30,8 +30,8 @@ def get_embeddings(face_patches):
 def identify():
     json = request.get_json()
     data = np.fromstring(json['img'].decode('base64'), np.uint8)
-    print(data.shape)
     img = cv2.imdecode(data, cv2.IMREAD_COLOR)
+    print(img.shape)
     embs, times = feature_extractor.getFeatures(img)
     names = []
     distances = []
@@ -56,6 +56,7 @@ def add():
     print('Should print now')
     data = np.fromstring(json['img'].decode('base64'), np.uint8)
     img = cv2.imdecode(data, cv2.IMREAD_COLOR)
+    print(img.shape)
     embs, times = feature_extractor.getFeatures(img)
     
     if len(embs) == 0:
