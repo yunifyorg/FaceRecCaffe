@@ -90,7 +90,8 @@ class FaceFeatureExtractor():
         im_gray = cv2.cvtColor(img_aligned.astype(np.float32), cv2.COLOR_RGB2GRAY)
         t2 = time.time()
         self.net.blobs['data'].data[...] = cv2.resize(im_gray, (128, 128))
-        result = self.net.forward()['fc1']
+        result = self.net.forward()
+        result = result[result.keys()[0]]
         t3 = time.time()
 
         times.update({'features': t3 - t2})

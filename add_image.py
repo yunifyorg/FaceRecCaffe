@@ -41,7 +41,7 @@ def add_image_name(url, server, name, no_duplicate=True):
             'filename': url
         }
         response = requests.post('https://%s:8080/add' % (server), json=data, verify=False)
-        print response
+        print response.text
         return
     else:
         print 'Image no longer exists in that url'
@@ -64,7 +64,7 @@ def add_image_name2(path, server, name, no_duplicate=True):
             'filename': url
         }
         response = requests.post('https://%s:8080/add' % (server), json=data, verify=False)
-        print response
+        print response.text
         return
     else:
         print 'Image no longer exists in that url'

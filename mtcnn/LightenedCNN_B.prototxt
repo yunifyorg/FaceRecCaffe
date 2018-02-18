@@ -460,3 +460,23 @@ layers{
   bottom: "pool4"
   top: "fc1"
 }
+layers{
+  name: "slice_fc1"
+  type:SLICE
+  slice_param {
+	slice_dim: 1
+  }
+  bottom: "fc1"
+  top: "slice_fc1_1"
+  top: "slice_fc1_2"
+}
+layers{
+  name: "etlwise_fc1"
+  type: ELTWISE
+  bottom: "slice_fc1_1"
+  bottom: "slice_fc1_2"
+  top: "eltwise_fc1"
+  eltwise_param {
+	operation: MAX
+  }
+}
