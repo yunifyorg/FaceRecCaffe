@@ -71,7 +71,7 @@ def add_image_name2(path, server, name, no_duplicate=True):
         return
 
 
-def add_image(url, _id, server='tx2', no_duplicate=True):
+def add_image(url, _id, server='tx1', no_duplicate=True):
     address = server + '.cachengo.com'
     name = ids.get(_id)
     if name is None:
