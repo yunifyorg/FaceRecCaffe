@@ -52,6 +52,18 @@
 			    display: none;
 			}
 
+			.snapimg{
+				width: 100%;
+			}
+
+			.center{
+				margin: 0;
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);
+		  }
+
 			.app #error-message{
 			    width: 100%;
 			    background-color: #ccc;
@@ -129,7 +141,11 @@
 			    display: flex;
 			}
 
-
+			.imgcont{
+				  padding-left: 15px;
+				  padding-right: 15px;
+				  padding-top: 15px;
+			}
 
 			@media(max-width: 1000px){
 			    .container{
@@ -175,12 +191,9 @@
   <body>
 	<div class="container">
 		<div class="row">
-		  <div class="app col-6">
-
+		  <div class="app col-lg-4">
 		    <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
 		    <video id="camera-stream"></video>
-		    
-
 		    <p id="error-message"></p>
 
 		    <div class="controls">
@@ -190,51 +203,48 @@
 		    <!-- Hidden canvas element. Used for taking snapshot of video. -->
 		    <canvas></canvas>
 		  </div>
-		  <div class="col-lg-6">
-		  	<div class="row">
-		  		<div class="col-lg-6">
-			  		<img id="snap">
-			  	</div>
-			  	<div class="col-lg-6">
-			  		<img id="celeb_img" src="file:///home/lafonj/Pictures/Webcam/2017-12-23-151950.jpg">
-			  	</div>
-			  </div>
-			  <div class="text-align">
-			  	<form class="form-horizontal">
-			  	<div class="form-group">
-			  	<label class="control-label col-sm-4" for="celeb">Celebrity look-alike:</label>
-			    <div class="col-sm-8">
-			      <p id="celeb" class="form-control-static">None</p>
-			    </div>
-			    </div>
-			    <div class="form-group">
-			    <label class="control-label col-sm-4" for="distance">Distance:</label>
-			    <div class="col-sm-8">
-			      <p id="distance" class="form-control-static">None</p>
-			    </div>
-			    </div>
-			    <div class="form-group">
-			    <label class="control-label col-sm-4" for="detect">Detection time:</label>
-			    <div class="col-sm-8">
-			      <p id="detect" class="form-control-static">120ms</p>
-			    </div>
-			    </div>
-			    <div class="form-group">
-			    <label class="control-label col-sm-4" for="align">Alignment time:</label>
-			    <div class="col-sm-8">
-			      <p id="align" class="form-control-static">200ms</p>
-			    </div>
-			    </div>
-			    <div class="form-group">
-			    <label class="control-label col-sm-4" for="features">Feature extraction time:</label>
-			    <div class="col-sm-8">
-			      <p id="features" class="form-control-static">600ms</p>
-			    </div>
-			    </div>
-			    </form>
-			  </div>>
-		  </div>
-		 </div>
+		  <div class="col-lg-4 imgcont">
+	  		<img id="snap" class="snapimg" src="https://www.edmontoncorporatechallenge.com/Sports%20Icons/unknown-challenge.png">
+	  	</div>
+	  	<div class="col-lg-4 imgcont">
+	  		<img id="celeb_img" class="snapimg" src="https://www.edmontoncorporatechallenge.com/Sports%20Icons/unknown-challenge.png">
+	  	</div>
+		</div>
+	  <div class="text-align">
+	  	<h3>Results</h3>
+	  	<form class="form-horizontal">
+		  	<div class="form-group row">
+		  	<label class="control-label col-6" for="celeb"><b>Celebrity look-alike:</b></label>
+		    <div class="col-6">
+		      <p id="celeb" class="form-control-static">None</p>
+		    </div>
+		    </div>
+		    <div class="form-group row">
+		    <label class="control-label col-6" for="distance"><b>Distance:</b></label>
+		    <div class="col-6">
+		      <p id="distance" class="form-control-static">None</p>
+		    </div>
+		    </div>
+		    <div class="form-group row">
+		    <label class="control-label col-6" for="detect"><b>Detection time:</b></label>
+		    <div class="col-6">
+		      <p id="detect" class="form-control-static">None</p>
+		    </div>
+		    </div>
+		    <div class="form-group row">
+		    <label class="control-label col-6" for="align"><b>Alignment time:</b></label>
+		    <div class="col-6">
+		      <p id="align" class="form-control-static">None</p>
+		    </div>
+		    </div>
+		    <div class="form-group row">
+		    <label class="control-label col-6" for="features"><b>Feature extraction time:</b></label>
+		    <div class="col-6">
+		      <p id="features" class="form-control-static">None</p>
+		    </div>
+		    </div>
+	    </form>
+	  </div>
 	</div>
 
 
@@ -339,13 +349,12 @@
 
 
 		function processResponse(resp){
-			debugger;
 			celeb_img.setAttribute('src', resp['filenames'][0]);
 	    celeb.innerText = resp['names'][0];
-	    distance.innerText = resp['distances'][0];
-	    detect.innerText = resp['times']['detection'];
-	    align.innerText = resp['times']['alignment'];
-	    features.innerText = resp['times']['features'];
+	    distance.innerText = Math.round(resp['distances'][0]*1000)/1000;
+	    detect.innerText = Math.round(1000 * resp['times']['detection']) + ' ms';
+	    align.innerText = Math.round(1000 * resp['times']['alignment']) + ' ms';
+	    features.innerText = Math.round(1000 * resp['times']['features']) + ' ms';
 		}
 
 		function takeSnapshot(){
@@ -372,7 +381,7 @@
 
 		    $.ajax({
 			   type: "POST",
-			   url: "https://tx2.cachengo.com:8080/identify",
+			   url: "/identify",
 			   data: JSON.stringify({"img": img}),
     		 contentType: 'application/json',
    			 processData: false,
