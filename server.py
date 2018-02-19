@@ -8,8 +8,9 @@ import numpy as np
 import pickle
 import requests
 import cv2
+import uuid
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 
 
 app = Flask(__name__)
@@ -64,20 +65,30 @@ def add():
     elif len(embs) > 1:
         return 'For registering a name, please use pictures with only one face'
 
+    filename = json.get('filename', '/img/'+uuid.uuid4()+'.png')
+
     data = {'name': json['name'],
             'vector': pickle.dumps(embs[0]),
             'model': 'caffe',
-            'filename': json['filename']
+            'filename': filename
             }
     r = requests.post(DB_ADDRESS + '/add', json=data)
+
+    if 'filename' not in json:
+        cv2.imwrite(filename, img)
+
     return r.text
 
 
 @app.route('/app', methods=['GET'])
 def webapp():
-    return render_template('app.html') 
+    return render_template('app.html')
 
 
+@app.route('/img/<path>')
+def images(path):
+  # send_static_file will guess the correct MIME type
+  return send_from_directory('/img/', path)
 
 
 if __name__ == "__main__":
