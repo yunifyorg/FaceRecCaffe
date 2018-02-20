@@ -18,7 +18,7 @@
 
 ##### Settings #####
 export WORKON_HOME=~/virtualenvs
-export PYTHONPATH=PYTHONPATH:/home/onf/caffe/python:/home/onf/opencv/build/lib
+export PYTHONPATH=PYTHONPATH:~/caffe/python:~/opencv/build/lib
 source /usr/local/bin/virtualenvwrapper.sh
 export DB_ADDRESS=http://localhost:5000
 serverPIDs=$(pgrep -f server.py)
