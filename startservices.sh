@@ -29,14 +29,12 @@ dbPIDs=$(pgrep -f facerec)
 faceRecServer() {
 	cd ~/FaceRecCaffe
 	python server.py &
-	serverPID=$!
 }
 
 faceRecDB() {
 	cd ~/FaceRecDB 
 	workon facerecdb
 	. boot.sh &
-	dbPID=$!
 }
 
 killServer() {
