@@ -7,7 +7,9 @@ import numpy as np
 
 from mtcnn import MTCNN
 
-
+GPU_ID = 0
+caffe.set_mode_gpu()
+caffe.set_device(GPU_ID)
 
 def find_new_locations(points, angle, center, adj, M):
     M_inv = cv2.getRotationMatrix2D(center, angle, 1.0)
