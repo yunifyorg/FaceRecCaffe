@@ -65,7 +65,7 @@ def add():
     elif len(embs) > 1:
         return 'For registering a name, please use pictures with only one face'
 
-    filename = json.get('filename', '/img/'+uuid.uuid4()+'.png')
+    filename = json.get('filename', '/img/'+str(uuid.uuid4())+'.png')
 
     data = {'name': json['name'],
             'vector': pickle.dumps(embs[0]),
